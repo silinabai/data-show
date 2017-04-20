@@ -23,9 +23,6 @@
 </template>
 
 <script>
-  import {
-    ajax
-  } from '../components/tool'
   export default {
     data() {
       return {
@@ -36,21 +33,18 @@
     methods: {
       login: function() {
         var that = this;
-        var user = new Object();
-        user.loginId = this.name;
-        user.password = this.password;
-        ajax({
-          type: "POST",
-          url: "http://xcloud.dev.xcharger.net/service/api/login",
-          data: JSON.stringify(user),
-          dataType: "json",
-          success: function(response) {
-            var info = JSON.parse(response);
-            console.log(info)
-          },
-          fail: function(response) {
-
+        this.axios({
+          method: 'post',
+          url: 'http://xcloud.dev.xcharger.net/service/api/login',
+          withCredentials: true,
+          data:{
+            loginId: that.name,
+            password: that.password
           }
+        }).then(rep =>{
+          that.$router.push('/admin')
+        }).catch(err =>{
+          console.log(err)
         })
       }
     }

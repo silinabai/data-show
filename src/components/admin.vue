@@ -1,6 +1,6 @@
 <template lang="html">
   <div class="admin">
-    <head-nav></head-nav>
+    <head-nav :title='title'></head-nav>
     <div class="frame">
       <div class="left-one">
         <real-time></real-time>
@@ -32,13 +32,11 @@ import year from './left-two/year'
 import circleData from './right/circle'
 import list from './right/list'
 import week from './right/week'
-  import {
-    ajax
-  } from '../components/tool'
 export default {
   data() {
     return {
-
+      title: '',
+      imgUrl: ''
     }
   },
   components: {
@@ -53,19 +51,19 @@ export default {
     week
   },
   created: function() {
-      ajax({
-				type: "GET",
-				async: false,
-		    url: "http://xcloud.dev.xcharger.net/service/api/myinfo",
-		    dataType: "json",
-		    success: function(data) {
-			    	var info = JSON.parse(data);
-			    	if(info.error != null){
-							alert(-1);
-							return false;
-			    	}
-			    }
-			});
+    var that = this;
+    this.axios({
+      url: 'http://xcloud.dev.xcharger.net/service/api/myinfo',
+      withCredentials: true
+    }).then(function(rep){
+      if(rep.data.error!=null){
+        that.$router.push('/');
+        return false
+      }else{
+        that.title = rep.data.result.title;
+        that.imgUrl = rep.data.result.imageUrl;
+      }
+    })
   }
 }
 </script>

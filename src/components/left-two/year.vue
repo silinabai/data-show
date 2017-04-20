@@ -6,7 +6,7 @@
 import echarts from 'echarts'
 
 function getVirtulData(year) {
-  year = year || '2017';
+  year = year || 2017;
   var date = +echarts.number.parseDate(year + '-01-01');
   var end = +echarts.number.parseDate((+year + 1) + '-01-01');
   var dayTime = 3600 * 24 * 1000;
@@ -15,12 +15,15 @@ function getVirtulData(year) {
     data.push([
       echarts.format.formatTime('yyyy-MM-dd', time),
       Math.floor(Math.random() * 10000)
-    ]);
+    ])
   }
   return data;
 }
 
 var data = getVirtulData(2016);
+
+
+
 export default {
   data() {
     return {
@@ -32,6 +35,19 @@ export default {
       window.addEventListener('resize', function() {
         this.myChart.resize()
       }.bind(this))
+    },
+    getLast12Months(){
+      var monthShow = {'1':'一月','2':'二月','3':'三月','4':'四月','5':'五月','6':'六月','7':'七月','8':'八月','9':'九月','10':'十月','11':'十一月','12':'十二月'};
+      var last12Months = [];
+      var today = new Date();
+
+      today.setMonth(today.getMonth()+1);
+      for(var i=0;i<12;i++){
+          var lastMonth = today.setMonth(today.getMonth()-1);
+          last12Months[11-i] = monthShow[String(Number(today.getMonth())+1)];
+      }
+      return last12Months;
+      console.log(last12Months)
     }
   },
   mounted() {
@@ -39,11 +55,11 @@ export default {
     this.myChart.setOption({
       backgroundColor: '#050a1e',
       tooltip: {
-        trigger: 'item'
+        show: false
       },
       // 日历组件
       calendar: [{
-        top: 55,
+        top: 70,
         left: 'center',
         cellSize: [13, 13],
         range: ['2016-01-01', '2016-06-30'],
@@ -70,7 +86,7 @@ export default {
           }
         },
         yearLabel: {
-          formatter: '{start}  上半年',
+          formatter: '近一年充电电量分布',
           position: 'top',
           textStyle: {
             color: '#fff',
@@ -110,12 +126,7 @@ export default {
           }
         },
         yearLabel: {
-          formatter: '{start}  下半年',
-          position: 'top',
-          textStyle: {
-            color: '#fff',
-            fontSize: 16
-          }
+          show: false
         },
         itemStyle: {
           normal: {
@@ -126,7 +137,7 @@ export default {
         }
       }],
       series: [{
-          name: '步数',
+          name: '充电数据',
           type: 'scatter',
           coordinateSystem: 'calendar',
           data: data,
@@ -140,7 +151,7 @@ export default {
           }
         },
         {
-          name: '步数',
+          name: '充电数据',
           type: 'scatter',
           coordinateSystem: 'calendar',
           calendarIndex: 1,

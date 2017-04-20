@@ -2,9 +2,9 @@
   <div class="head">
     <div class="name">智充充电数据监控</div>
     <div class="info">
-      <img :src="img">
+      <img :src="imgUrl">
       <div class="exit" @click='exit'>退出</div>
-      <div class="name">{{user}}</div>
+      <div class="name">{{title}}</div>
     </div>
   </div>
 </template>
@@ -18,18 +18,18 @@ export default {
     }
   },
   props: {
-    user:{
+    title:{
       type: String,
       default: '智充科技'
     },
-    img:{
+    imgUrl:{
       type: String,
       default: headPhoto
     }
   },
   methods:{
     exit:function(){
-      console.log(11111)
+      
     }
   }
 }
