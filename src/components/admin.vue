@@ -1,6 +1,6 @@
 <template lang="html">
   <div class="admin">
-    <head-nav :title='title'></head-nav>
+    <head-nav :title='title' :id='id'></head-nav>
     <div class="frame">
       <div class="left-one">
         <real-time></real-time>
@@ -36,7 +36,8 @@ export default {
   data() {
     return {
       title: '',
-      imgUrl: ''
+      imgUrl: '',
+      id: ''
     }
   },
   components: {
@@ -62,6 +63,7 @@ export default {
       }else{
         that.title = rep.data.result.title;
         that.imgUrl = rep.data.result.imageUrl;
+        that.id = rep.data.result.id
       }
     })
   }

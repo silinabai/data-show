@@ -52,19 +52,21 @@ export default {
       url: 'http://xcloud.dev.xcharger.net/service/api/chargebill?from=0&length=4',
       withCredentials: true
     }).then(function(response) {
-      response.data.result.forEach(function(e,index){
-        let item = {
-          imageUrl: e.wechatUser.imageUrl,
-          id: e.id,
-          title: e.site.title,
-          chargeStartTime: e.chargeStartTime,
-          chargeInterval: e.chargeInterval,
-          feeTotal: e.feeTotal,
-          powerCharged: e.powerCharged,
-          batteryCharged: e.batteryCharged?e.batteryCharged:false
-        }
-        that.items.push(item)
-      })
+      if (response.data.result.error == null) {
+        response.data.result.forEach(function(e, index) {
+          let item = {
+            imageUrl: e.wechatUser.imageUrl,
+            id: e.id,
+            title: e.site.title,
+            chargeStartTime: e.chargeStartTime,
+            chargeInterval: e.chargeInterval,
+            feeTotal: e.feeTotal,
+            powerCharged: e.powerCharged,
+            batteryCharged: e.batteryCharged ? e.batteryCharged : false
+          }
+          that.items.push(item)
+        })
+      }
     })
   },
   mounted() {

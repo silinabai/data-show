@@ -3,7 +3,10 @@
 </template>
 
 <script>
-import echarts from 'echarts'
+import echarts from 'echarts/lib/echarts'
+import 'echarts/lib/chart/heatmap'
+import 'echarts/lib/component/visualMap'
+import 'echarts/lib/component/title'
 export default {
   data() {
     return {
@@ -100,7 +103,7 @@ export default {
           data: this.text,
           label: {
             normal: {
-              show: true
+              show: false
             }
           },
           itemStyle: {

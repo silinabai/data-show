@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import echarts from 'echarts'
+import echarts from 'echarts/lib/echarts'
 import 'echarts/map/js/china'
 export default {
   data() {

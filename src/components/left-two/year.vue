@@ -3,27 +3,13 @@
 </template>
 
 <script>
-import echarts from 'echarts'
+import echarts from 'echarts/lib/echarts'
+import 'echarts/lib/chart/scatter'
+import 'echarts/lib/chart/effectScatter'
+import 'echarts/lib/component/calendar'
 
-function getVirtulData(year) {
-  year = year || 2017;
-  var date = +echarts.number.parseDate(year + '-01-01');
-  var end = +echarts.number.parseDate((+year + 1) + '-01-01');
-  var dayTime = 3600 * 24 * 1000;
-  var data = [];
-  for (var time = date; time < end; time += dayTime) {
-    data.push([
-      echarts.format.formatTime('yyyy-MM-dd', time),
-      Math.floor(Math.random() * 10000)
-    ])
-  }
-  return data;
-}
-
+function getVirtulData(year) {	var dt = new Date();	var end = +echarts.number.parseDate(dt.getFullYear() + '-' + dt.getMonth() + (dt.getMonth()=='2'?'-29':'-30'));	dt.setMonth(dt.getMonth()-12);  var date = +echarts.number.parseDate(dt.getFullYear() + '-' + dt.getMonth() + '-01');  var dayTime = 3600 * 24 * 1000;  var data = [];  for (var time = date; time < end; time += dayTime) {    data.push([      echarts.format.formatTime('yyyy-MM-dd', time),      Math.floor(Math.random() * 10000)    ])  }  return data;}
 var data = getVirtulData(2016);
-
-
-
 export default {
   data() {
     return {
@@ -36,21 +22,17 @@ export default {
         this.myChart.resize()
       }.bind(this))
     },
-    getLast12Months(){
-      var monthShow = {'1':'一月','2':'二月','3':'三月','4':'四月','5':'五月','6':'六月','7':'七月','8':'八月','9':'九月','10':'十月','11':'十一月','12':'十二月'};
-      var last12Months = [];
-      var today = new Date();
-
-      today.setMonth(today.getMonth()+1);
-      for(var i=0;i<12;i++){
-          var lastMonth = today.setMonth(today.getMonth()-1);
-          last12Months[11-i] = monthShow[String(Number(today.getMonth())+1)];
-      }
-      return last12Months;
-      console.log(last12Months)
-    }
   },
   mounted() {
+    var dt = new Date();
+  	var y4 = dt.getFullYear() + '-' + dt.getMonth() + (dt.getMonth()=='2'?'-29':'-30');
+		dt.setMonth(dt.getMonth()-5);
+		var y3 = dt.getFullYear() + '-' + dt.getMonth() + '-01';
+		dt.setMonth(dt.getMonth()-1);
+		var y2 = dt.getFullYear() + '-' + dt.getMonth() + (dt.getMonth()=='2'?'-29':'-30');
+		dt.setMonth(dt.getMonth()-5);
+		var y1 = dt.getFullYear() + '-' + dt.getMonth() + '-01';
+
     this.myChart = echarts.init(document.getElementById('year'));
     this.myChart.setOption({
       backgroundColor: '#050a1e',
@@ -62,7 +44,7 @@ export default {
         top: 70,
         left: 'center',
         cellSize: [13, 13],
-        range: ['2016-01-01', '2016-06-30'],
+        range: [y1, y2],
         splitLine: {
           show: true,
           lineStyle: {
@@ -104,7 +86,7 @@ export default {
         top: 205,
         left: 'center',
         cellSize: [13, 13],
-        range: ['2016-07-01', '2016-12-31'],
+        range: [y3, y4],
         splitLine: {
           show: true,
           lineStyle: {

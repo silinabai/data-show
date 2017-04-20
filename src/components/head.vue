@@ -25,11 +25,24 @@ export default {
     imgUrl:{
       type: String,
       default: headPhoto
+    },
+    id:{
+      type: String
     }
   },
   methods:{
     exit:function(){
-      
+      let that = this
+      this.axios({
+        method: 'post',
+        url: 'http://xcloud.dev.xcharger.net/service/api/logout',
+        withCredentials: true,
+        data:{
+          loginId: that.id
+        }
+      }).then(res =>{
+        that.$router.push('/')
+      })
     }
   }
 }

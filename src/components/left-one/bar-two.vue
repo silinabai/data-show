@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import echarts from 'echarts'
+import echarts from 'echarts/lib/echarts'
 export default {
   data() {
     return {
