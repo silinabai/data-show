@@ -13,9 +13,12 @@
           </div>
           <div class="mode">
             <div class="name">登录密码:</div>
-            <input type="password" v-model='password' placeholder='请输入登录密码' @keyup.enter='login'>
+            <input type="password" v-model='password' placeholder='请输入登录密码'>
           </div>
           <div class="button" @click='login'>登录</div>
+          <transition name="fade">
+            <div class="error" v-show='flagError'>您的账号或密码错误！请重新输入</div>
+          </transition>
         </div>
       </div>
     </div>
@@ -26,6 +29,7 @@
   export default {
     data() {
       return {
+        flagError: false,
         name: 'zhichong',
         password: 'xcharger88'
       }
@@ -33,19 +37,34 @@
     methods: {
       login: function() {
         var that = this;
+        if (this.name == '' || this.password == '') {
+          this.error()
+          return false
+        }
         this.axios({
           method: 'post',
           url: 'http://xcloud.dev.xcharger.net/service/api/login',
           withCredentials: true,
-          data:{
+          data: {
             loginId: that.name,
             password: that.password
           }
-        }).then(rep =>{
-          that.$router.push('/admin')
-        }).catch(err =>{
+        }).then(rep => {
+          if(rep.data.error == null){
+            that.$router.push('/admin')
+          }else{
+            that.error()
+          }
+        }).catch(err => {
           console.log(err)
         })
+      },
+      error() {
+        let that = this
+        this.flagError = true
+        setTimeout(function() {
+          that.flagError = false
+        }, 3500)
       }
     }
   }
@@ -56,6 +75,16 @@
     font-size: 15px;
     line-height: 40px;
     color: #7485a3;
+  }
+
+  .fade-enter-active,
+  .fade-leave-active {
+    transition: opacity .5s
+  }
+
+  .fade-enter,
+  .fade-leave-active {
+    opacity: 0
   }
 
   .login {
@@ -125,7 +154,7 @@
           & .button {
             width: 420px;
             height: 50px;
-            margin: 60px auto;
+            margin: 60px auto 0;
             line-height: 50px;
             border-radius: 50px;
             background: #0072FD;
@@ -136,6 +165,12 @@
             &:hover {
               background: #3977E7;
             }
+          }
+          & .error {
+            font-size: 16px;
+            margin-top: 20px;
+            text-align: center;
+            color: #F44752;
           }
         }
       }

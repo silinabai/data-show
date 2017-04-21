@@ -53,6 +53,13 @@ export default {
       }.bind(this))
     }
   },
+  created(){
+    let that = this
+    this.axios.get('static/map-value.json').then(rep =>{
+      // that.data = rep.mapvalue
+      // that.geoCoordMap = rep.mapaddress
+    })
+  },
   mounted() {
     this.myChart = echarts.init(document.getElementById('map'));
     this.myChart.setOption({

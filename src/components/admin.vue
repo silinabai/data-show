@@ -56,11 +56,11 @@ export default {
     this.axios({
       url: 'http://xcloud.dev.xcharger.net/service/api/myinfo',
       withCredentials: true
-    }).then(function(rep){
-      if(rep.data.error!=null){
+    }).then(function(rep) {
+      if (rep.data.error != null) {
         that.$router.push('/');
         return false
-      }else{
+      } else {
         that.title = rep.data.result.title;
         that.imgUrl = rep.data.result.imageUrl;
         that.id = rep.data.result.id
