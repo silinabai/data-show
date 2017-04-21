@@ -53,115 +53,123 @@ export default {
       }.bind(this))
     }
   },
+  watch: {
+	    	'geoCoordMap': function (newV, oldV){
+	    		if(newV != null && newV != undefined){
+	    			console.log(1);
+	    			this.myChart = echarts.init(document.getElementById('map'));
+	    			this.myChart.setOption({
+			      tooltip: {
+			        trigger: 'item',
+			        show: false
+			      },
+			      visualMap: {
+			        show: false,
+			        itemWidth: 10,
+			        itemHeight: 10,
+			        bottom: 55,
+			        calculable: true,
+			        color: ['#0688e5'],
+			        left: 100
+			      },
+			      legend: {
+			        orient: 'vertical',
+			        y: 'bottom',
+			        x: 'left',
+			        data: ['pm2.5'],
+			        textStyle: {
+			          color: '#fff'
+			        }
+			      },
+			      geo: {
+			        map: 'china',
+			        label: {
+			          emphasis: {
+			            show: false
+			          }
+			        },
+			        left: 0,
+			        right: 0,
+			
+			        itemStyle: {
+			          normal: {
+			            areaColor: '#323c48',
+			            borderColor: '#111'
+			          },
+			          emphasis: {
+			            areaColor: '#2a333d'
+			          }
+			        }
+			      },
+			      series: [{
+			          name: '',
+			          type: 'scatter',
+			          coordinateSystem: 'geo',
+			          data: this.convertData(this.data),
+			          symbolSize: function(val) {
+			            return val[2] / 3;
+			          },
+			          label: {
+			            normal: {
+			              formatter: '{b}',
+			              position: 'right',
+			              show: false
+			            },
+			            emphasis: {
+			              show: true
+			            }
+			          },
+			          itemStyle: {
+			            normal: {
+			              color: '#0072fd'
+			            }
+			          }
+			        },
+			        {
+			          type: 'effectScatter',
+			          coordinateSystem: 'geo',
+			          data: this.convertData(this.data.sort(function(a, b) {
+			            return b.value - a.value;
+			          }).slice(0, 1)),
+			          symbolSize: function(val) {
+			            return val[2] / 3;
+			          },
+			          showEffectOn: 'render',
+			          rippleEffect: {
+			            brushType: 'stroke'
+			          },
+			          hoverAnimation: true,
+			          label: {
+			            normal: {
+			              formatter: '{b}',
+			              position: 'right',
+			              show: false
+			            }
+			          },
+			          itemStyle: {
+			            normal: {
+			              color: '#f4e925',
+			              shadowBlur: 10,
+			              shadowColor: '#333'
+			            }
+			          },
+			          zlevel: 1
+			        }
+			      ]
+			    })
+	    		this._init()
+	    		}
+	    	}
+	  	},
   created(){
     let that = this
     this.axios.get('static/map-value.json').then(rep =>{
-      // that.data = rep.mapvalue
-      // that.geoCoordMap = rep.mapaddress
+			that.data = rep.data.mapvalue
+			that.geoCoordMap = rep.data.mapaddress
     })
   },
   mounted() {
-    this.myChart = echarts.init(document.getElementById('map'));
-    this.myChart.setOption({
-      tooltip: {
-        trigger: 'item'
-      },
-      visualMap: {
-        show: false,
-        itemWidth: 10,
-        itemHeight: 10,
-        bottom: 55,
-        calculable: true,
-        color: ['#0688e5', '#f35f71', '#00d569', '#e39616'],
-        left: 100
-      },
-      legend: {
-        orient: 'vertical',
-        y: 'bottom',
-        x: 'left',
-        data: ['pm2.5'],
-        textStyle: {
-          color: '#fff'
-        }
-      },
-      geo: {
-        map: 'china',
-        label: {
-          emphasis: {
-            show: false
-          }
-        },
-        left: 0,
-        right: 0,
-
-        itemStyle: {
-          normal: {
-            areaColor: '#323c48',
-            borderColor: '#111'
-          },
-          emphasis: {
-            areaColor: '#2a333d'
-          }
-        }
-      },
-      series: [{
-          name: '',
-          type: 'scatter',
-          coordinateSystem: 'geo',
-          data: this.convertData(this.data),
-          symbolSize: function(val) {
-            return val[2] / 10;
-          },
-          label: {
-            normal: {
-              formatter: '{b}',
-              position: 'right',
-              show: false
-            },
-            emphasis: {
-              show: true
-            }
-          },
-          itemStyle: {
-            normal: {
-              color: '#0072fd'
-            }
-          }
-        },
-        {
-          name: 'Top 5',
-          type: 'effectScatter',
-          coordinateSystem: 'geo',
-          data: this.convertData(this.data.sort(function(a, b) {
-            return b.value - a.value;
-          }).slice(0, 6)),
-          symbolSize: function(val) {
-            return val[2] / 10;
-          },
-          showEffectOn: 'render',
-          rippleEffect: {
-            brushType: 'stroke'
-          },
-          hoverAnimation: true,
-          label: {
-            normal: {
-              formatter: '{b}',
-              position: 'right',
-              show: true
-            }
-          },
-          itemStyle: {
-            normal: {
-              color: '#f4e925',
-              shadowBlur: 10,
-              shadowColor: '#333'
-            }
-          },
-          zlevel: 1
-        }
-      ]
-    })
-    this._init()
+    
   }
 }
 </script>
