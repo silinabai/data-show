@@ -13,7 +13,7 @@
           </div>
           <div class="mode">
             <div class="name">登录密码:</div>
-            <input type="password" v-model='password' placeholder='请输入登录密码'>
+            <input type="password" v-model='password' placeholder='请输入登录密码' @keyup.enter='login'>
           </div>
           <div class="button" @click='login'>登录</div>
           <transition name="fade">
