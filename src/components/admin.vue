@@ -23,6 +23,7 @@
 </template>
 
 <script>
+import {baseUrl} from './tool'
 import headNav from './head'
 import realTime from './left-one/real-time'
 import Top10 from './left-one/Top10'
@@ -54,7 +55,7 @@ export default {
   created: function() {
     var that = this;
     this.axios({
-      url: 'http://xcloud.dev.xcharger.net/service/api/myinfo',
+      url: `${baseUrl}/myinfo`,
       withCredentials: true
     }).then(function(rep) {
       if (rep.data.error != null) {
@@ -74,7 +75,7 @@ export default {
 .admin {
     width: 100%;
     min-height: 100%;
-    background: url('../assets/bg.jpg') no-repeat center;
+    background:#050a1e url('../assets/bg.jpg') no-repeat center;
     background-size: cover;
     min-width: 1320px;
     & .frame {

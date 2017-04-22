@@ -3,45 +3,25 @@
 </template>
 
 <script>
-import echarts from 'echarts/lib/echarts'
+import echarts from 'echarts'
 import 'echarts/map/js/china'
 export default {
   data() {
     return {
       myChart: {},
-      data: [{
-          name: '海门',
-          value: 189
-        },
-        {
-          name: '鄂尔多斯',
-          value: 12
-        }, {
-          name: "招远",
-          value: 12
-        },
-        {
-          name: "舟山",
-          value: 19
-        }
-      ],
-      geoCoordMap: {
-        '海门': [121.15, 31.89],
-        '鄂尔多斯': [109.781327, 39.608266],
-        "招远": [120.38, 37.35],
-        "舟山": [122.207216, 29.985295],
-      }
+      data: [],
+      geoCoordMap: {}
     }
   },
   methods: {
-    convertData: function() {
+    convertData: function(data) {
       var res = [];
-      for (var i = 0; i < this.data.length; i++) {
-        var geoCoord = this.geoCoordMap[this.data[i].name];
+      for (var i = 0; i < data.length; i++) {
+        var geoCoord = this.geoCoordMap[data[i].name];
         if (geoCoord) {
           res.push({
-            name: this.data[i].name,
-            value: geoCoord.concat(this.data[i].value)
+            name: data[i].name,
+            value: geoCoord.concat(data[i].value)
           });
         }
       }
@@ -53,123 +33,99 @@ export default {
       }.bind(this))
     }
   },
-  watch: {
-	    	'geoCoordMap': function (newV, oldV){
-	    		if(newV != null && newV != undefined){
-	    			console.log(1);
-	    			this.myChart = echarts.init(document.getElementById('map'));
-	    			this.myChart.setOption({
-			      tooltip: {
-			        trigger: 'item',
-			        show: false
-			      },
-			      visualMap: {
-			        show: false,
-			        itemWidth: 10,
-			        itemHeight: 10,
-			        bottom: 55,
-			        calculable: true,
-			        color: ['#0688e5'],
-			        left: 100
-			      },
-			      legend: {
-			        orient: 'vertical',
-			        y: 'bottom',
-			        x: 'left',
-			        data: ['pm2.5'],
-			        textStyle: {
-			          color: '#fff'
-			        }
-			      },
-			      geo: {
-			        map: 'china',
-			        label: {
-			          emphasis: {
-			            show: false
-			          }
-			        },
-			        left: 0,
-			        right: 0,
-			
-			        itemStyle: {
-			          normal: {
-			            areaColor: '#323c48',
-			            borderColor: '#111'
-			          },
-			          emphasis: {
-			            areaColor: '#2a333d'
-			          }
-			        }
-			      },
-			      series: [{
-			          name: '',
-			          type: 'scatter',
-			          coordinateSystem: 'geo',
-			          data: this.convertData(this.data),
-			          symbolSize: function(val) {
-			            return val[2] / 3;
-			          },
-			          label: {
-			            normal: {
-			              formatter: '{b}',
-			              position: 'right',
-			              show: false
-			            },
-			            emphasis: {
-			              show: true
-			            }
-			          },
-			          itemStyle: {
-			            normal: {
-			              color: '#0072fd'
-			            }
-			          }
-			        },
-			        {
-			          type: 'effectScatter',
-			          coordinateSystem: 'geo',
-			          data: this.convertData(this.data.sort(function(a, b) {
-			            return b.value - a.value;
-			          }).slice(0, 1)),
-			          symbolSize: function(val) {
-			            return val[2] / 3;
-			          },
-			          showEffectOn: 'render',
-			          rippleEffect: {
-			            brushType: 'stroke'
-			          },
-			          hoverAnimation: true,
-			          label: {
-			            normal: {
-			              formatter: '{b}',
-			              position: 'right',
-			              show: false
-			            }
-			          },
-			          itemStyle: {
-			            normal: {
-			              color: '#f4e925',
-			              shadowBlur: 10,
-			              shadowColor: '#333'
-			            }
-			          },
-			          zlevel: 1
-			        }
-			      ]
-			    })
-	    		this._init()
-	    		}
-	    	}
-	  	},
-  created(){
-    let that = this
-    this.axios.get('static/map-value.json').then(rep =>{
-			that.data = rep.data.mapvalue
-			that.geoCoordMap = rep.data.mapaddress
-    })
-  },
   mounted() {
-    
+    this._init()
+    let that = this
+    this.myChart = echarts.init(document.getElementById('map'));
+    this.axios.get('static/map-value.json').then(rep => {
+      that.data = rep.data.mapvalue
+      that.geoCoordMap = rep.data.mapaddress
+      that.myChart.setOption({
+        tooltip: {
+          show: false
+        },
+        legend: {
+          orient: 'vertical',
+          y: 'bottom',
+          x: 'left',
+          data: ['充电数据'],
+          textStyle: {
+            color: '#fff'
+          }
+        },
+        geo: {
+          map: 'china',
+          label: {
+            emphasis: {
+              show: false
+            }
+          },
+          left: 0,
+          right: 0,
+
+          itemStyle: {
+            normal: {
+              areaColor: '#323c48',
+              borderColor: '#111'
+            },
+            emphasis: {
+              areaColor: '#2a333d'
+            }
+          }
+        },
+        series: [{
+          name: '',
+          type: 'scatter',
+          coordinateSystem: 'geo',
+          data: that.convertData(that.data),
+          symbolSize: function(val) {
+            return val[2] / 5;
+          },
+          label: {
+            normal: {
+              show: false
+            }
+          },
+          itemStyle: {
+            normal: {
+              color: '#0688e5'
+            }
+          }
+        }, {
+          name: '前五名',
+          type: 'effectScatter',
+          coordinateSystem: 'geo',
+          data: that.convertData(that.data.sort(function(a, b) {
+            return b.value - a.value;
+          }).slice(0, 6)),
+          symbolSize: function(val) {
+            return val[2] / 5;
+          },
+          showEffectOn: 'render',
+          rippleEffect: {
+            brushType: 'stroke'
+          },
+          label: {
+            normal: {
+              formatter: '{b}',
+              position: 'right',
+              show: false
+            },
+            emphasis: {
+              show: true
+            }
+          },
+          itemStyle: {
+            normal: {
+              color: '#0072fd',
+              shadowBlur: 10,
+              shadowColor: '#333'
+            }
+          },
+          zlevel: 1
+        }]
+      })
+    })
   }
 }
 </script>

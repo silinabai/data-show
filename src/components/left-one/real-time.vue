@@ -9,6 +9,7 @@
 </template>
 
 <script>
+import {baseUrl} from '../tool'
 import datalist_1 from '../../assets/datalist-1.png'
 import datalist_2 from '../../assets/datalist-2.png'
 import datalist_3 from '../../assets/datalist-3.png'
@@ -18,15 +19,15 @@ export default {
     return {
       list: [{
         title: '充电桩(个)',
-        num: 11325,
+        num: 8405,
         img: datalist_1
       }, {
         title: '次数(次)',
-        num: 3501,
+        num: null,
         img: datalist_3
       }, {
-        title: '电量(万度)',
-        num: 23752,
+        title: '电量(度)',
+        num: null,
         img: datalist_2
       }, {
         title: '减少碳排放(千克)',
@@ -36,42 +37,40 @@ export default {
     }
   },
   methods: {
+    // 获取当天的时间
     getTime(num) {
       var date = new Date();
-      var month = date.getMonth() + num;
-      var strDate = date.getDate();
-      var strhour = date.getHours();
-      var strmin = date.getMinutes();
-      var strsen = date.getSeconds();
+      var month = date.getMonth() + 1;
+      var strDate = date.getDate() - num;
       if (month >= 1 && month <= 9) {
         month = "0" + month;
       }
       if (strDate >= 0 && strDate <= 9) {
         strDate = "0" + strDate;
       }
-      if (strhour >= 0 && strhour <= 9) {
-        strhour = "0" + strhour
-      }
-      if (strmin >= 0 && strmin <= 9) {
-        strmin = "0" + strmin
-      }
-      if (strsen >= 0 && strsen <= 9) {
-        strsen = "0" + strsen
-      }
-      var currentdate = date.getFullYear() + month + strDate + strhour + strmin + strsen;
+      var currentdate = date.getFullYear() + month + strDate + "000000";
       return currentdate;
+    },
+    // axios获取列表
+    getList(){
+      let that = this
+      let start = this.getTime(1)
+      let end = this.getTime(0)
+      this.axios({
+        url: `${baseUrl}/chargebill/stats?startTime=${start}&endTime=${end}`,
+        withCredentials: true
+      }).then(rep => {
+        that.list[1].num = rep.data.result.timesCount*55
+        that.list[2].num = rep.data.result.powerCharged==null?0:rep.data.result.powerCharged*55
+        that.list[3].num = rep.data.result.powerCharged==null?0:rep.data.result.powerCharged*0.14
+      })
     }
   },
   created() {
-    let that = this
-    let start = this.getTime(0)
-    let end = this.getTime(1)
-    this.axios({
-      url: `http://xcloud.dev.xcharger.net/service/api/chargebill/stats?startTime=${start}&endTime=${end}`,
-      withCredentials: true
-    }).then(rep => {
-      console.log(rep)
-    })
+    this.getList()
+    setInterval(() =>{
+      this.getList()
+    },5000)
   }
 }
 </script>

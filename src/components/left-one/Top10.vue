@@ -2,9 +2,9 @@
   <div class="top">
     <div class="title">24小时城市排名 - Top10</div>
     <div class="buttons" ref='buttons'>
-      <div class="button" @click='changeBar_one' :class="{'active-one':flagOne}">用电量</div>
+      <div class="button" @click='changeBar_one' :class="{'active-one':flagOne}">用电量(度)</div>
       <div class="button" @click='changeBar_two' :class="{'active-two':flagTwo}">用电次数</div>
-      <div class="button" @click='changeBar_three' :class="{'active-three':flagThree}">使用率</div>
+      <div class="button" @click='changeBar_three' :class="{'active-three':flagThree}">时长(分钟)</div>
     </div>
     <div class="bars">
       <bar-one v-if='changeBtn==1'></bar-one>

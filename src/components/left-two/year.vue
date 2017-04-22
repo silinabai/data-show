@@ -8,12 +8,26 @@ import 'echarts/lib/chart/scatter'
 import 'echarts/lib/chart/effectScatter'
 import 'echarts/lib/component/calendar'
 
-function getVirtulData(year) {	var dt = new Date();	var end = +echarts.number.parseDate(dt.getFullYear() + '-' + dt.getMonth() + (dt.getMonth()=='2'?'-29':'-30'));	dt.setMonth(dt.getMonth()-12);  var date = +echarts.number.parseDate(dt.getFullYear() + '-' + dt.getMonth() + '-01');  var dayTime = 3600 * 24 * 1000;  var data = [];  for (var time = date; time < end; time += dayTime) {    data.push([      echarts.format.formatTime('yyyy-MM-dd', time),      Math.floor(Math.random() * 10000)    ])  }  return data;}
-var data = getVirtulData(2016);
+function getVirtulData(year) {
+  var dt = new Date();
+  var end = +echarts.number.parseDate(dt.getFullYear() + '-' + dt.getMonth() + (dt.getMonth() == '2' ? '-29' : '-30'));
+  dt.setMonth(dt.getMonth() - 12);
+  var date = +echarts.number.parseDate(dt.getFullYear() + '-' + dt.getMonth() + '-01');
+  var dayTime = 3600 * 24 * 1000;
+  var data = [];
+  for (var time = date; time < end; time += dayTime) {
+    data.push([
+      echarts.format.formatTime('yyyy-MM-dd', time),
+      Math.floor(Math.random() * 100)
+    ])
+  }
+  return data;
+}
 export default {
   data() {
     return {
-      myChart: {}
+      myChart: {},
+      data: getVirtulData(2016)
     }
   },
   methods: {
@@ -22,17 +36,33 @@ export default {
         this.myChart.resize()
       }.bind(this))
     },
+    echartSet() {
+      this.myChart.setOption({
+        series: [{
+          data: this.data
+        }, {
+          data: this.data
+        }, {
+          data: this.data.sort(function(a, b) {
+            return b[1] - a[1];
+          }).slice(0, 12)
+        }, {
+          data: this.data.sort(function(a, b) {
+            return b[1] - a[1];
+          }).slice(0, 12)
+        }]
+      })
+    }
   },
   mounted() {
     var dt = new Date();
-  	var y4 = dt.getFullYear() + '-' + dt.getMonth() + (dt.getMonth()=='2'?'-29':'-30');
-		dt.setMonth(dt.getMonth()-5);
-		var y3 = dt.getFullYear() + '-' + dt.getMonth() + '-01';
-		dt.setMonth(dt.getMonth()-1);
-		var y2 = dt.getFullYear() + '-' + dt.getMonth() + (dt.getMonth()=='2'?'-29':'-30');
-		dt.setMonth(dt.getMonth()-5);
-		var y1 = dt.getFullYear() + '-' + dt.getMonth() + '-01';
-
+    var y4 = dt.getFullYear() + '-' + dt.getMonth() + (dt.getMonth() == '2' ? '-29' : '-30');
+    dt.setMonth(dt.getMonth() - 5);
+    var y3 = dt.getFullYear() + '-' + dt.getMonth() + '-01';
+    dt.setMonth(dt.getMonth() - 1);
+    var y2 = dt.getFullYear() + '-' + dt.getMonth() + (dt.getMonth() == '2' ? '-29' : '-30');
+    dt.setMonth(dt.getMonth() - 5);
+    var y1 = dt.getFullYear() + '-' + dt.getMonth() + '-01';
     this.myChart = echarts.init(document.getElementById('year'));
     this.myChart.setOption({
       backgroundColor: '#050a1e',
@@ -42,8 +72,9 @@ export default {
       // 日历组件
       calendar: [{
         top: 70,
-        left: 'center',
-        cellSize: [13, 13],
+        left: '10%',
+        right: '6%',
+        cellSize: ['auto', 13],
         range: [y1, y2],
         splitLine: {
           show: true,
@@ -84,8 +115,9 @@ export default {
         }
       }, {
         top: 205,
-        left: 'center',
-        cellSize: [13, 13],
+        left: '10%',
+        right: '6%',
+        cellSize: ['auto', 13],
         range: [y3, y4],
         splitLine: {
           show: true,
@@ -122,9 +154,9 @@ export default {
           name: '充电数据',
           type: 'scatter',
           coordinateSystem: 'calendar',
-          data: data,
+          data: [],
           symbolSize: function(val) {
-            return val[1] / 800;
+            return val[1] / 10;
           },
           itemStyle: {
             normal: {
@@ -137,9 +169,9 @@ export default {
           type: 'scatter',
           coordinateSystem: 'calendar',
           calendarIndex: 1,
-          data: data,
+          data: [],
           symbolSize: function(val) {
-            return val[1] / 800;
+            return val[1] / 10;
           },
           itemStyle: {
             normal: {
@@ -152,11 +184,9 @@ export default {
           type: 'effectScatter',
           coordinateSystem: 'calendar',
           calendarIndex: 1,
-          data: data.sort(function(a, b) {
-            return b[1] - a[1];
-          }).slice(0, 12),
+          data: [],
           symbolSize: function(val) {
-            return val[1] / 1200;
+            return val[1] / 8;
           },
           showEffectOn: 'render',
           rippleEffect: {
@@ -176,11 +206,9 @@ export default {
           name: 'Top 12',
           type: 'effectScatter',
           coordinateSystem: 'calendar',
-          data: data.sort(function(a, b) {
-            return b[1] - a[1];
-          }).slice(0, 12),
+          data: [],
           symbolSize: function(val) {
-            return val[1] / 1200;
+            return val[1] / 8;
           },
           showEffectOn: 'render',
           rippleEffect: {
@@ -199,6 +227,9 @@ export default {
       ]
     })
     this._init()
+    setTimeout(() =>{
+      this.echartSet()
+    },200)
   }
 }
 </script>

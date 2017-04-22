@@ -27,6 +27,9 @@
 </template>
 
 <script>
+import {
+  baseUrl
+} from '../tool'
 export default {
   data() {
     return {
@@ -35,39 +38,54 @@ export default {
     }
   },
   methods: {
+    // 地图的自动响应
     _init() {
       window.addEventListener('resize', function() {
         this.changeFlag()
       }.bind(this))
     },
+    // 隐藏或显示用户的头像
     changeFlag() {
       let width = document.documentElement.clientWidth;
       if (width <= 1800) this.flagImg = false
       else this.flagImg = true
+    },
+    // 格式化时间
+    format(date) {
+      return date.slice(0, 4) + '-' + date.slice(4, 6) + '-' + date.slice(6, 8) + ' ' + date.slice(8, 10) + ':' + date.slice(10, 12)
+    },
+    // axios请求
+    getList() {
+      let that = this
+      this.axios({
+        url: `${baseUrl}/chargebill?from=0&length=4`,
+        withCredentials: true
+      }).then(function(response) {
+        if (response.data.result.error == null) {
+          let arr = []
+          response.data.result.forEach(function(e, index) {
+            let item = {
+              imageUrl: e.wechatUser.imageUrl,
+              id: e.id,
+              title: e.site.title,
+              chargeStartTime: that.format(e.chargeStartTime),
+              chargeInterval: e.chargeInterval,
+              feeTotal: e.feeTotal,
+              powerCharged: e.powerCharged,
+              batteryCharged: e.batteryCharged ? e.batteryCharged : false
+            }
+            arr.push(item)
+          })
+          that.items = arr
+        }
+      })
     }
   },
   created() {
-    var that = this
-    this.axios({
-      url: 'http://xcloud.dev.xcharger.net/service/api/chargebill?from=0&length=4',
-      withCredentials: true
-    }).then(function(response) {
-      if (response.data.result.error == null) {
-        response.data.result.forEach(function(e, index) {
-          let item = {
-            imageUrl: e.wechatUser.imageUrl,
-            id: e.id,
-            title: e.site.title,
-            chargeStartTime: e.chargeStartTime,
-            chargeInterval: e.chargeInterval,
-            feeTotal: e.feeTotal,
-            powerCharged: e.powerCharged,
-            batteryCharged: e.batteryCharged ? e.batteryCharged : false
-          }
-          that.items.push(item)
-        })
-      }
-    })
+    this.getList()
+    setInterval(() =>{
+      this.getList()
+    }, 5000)
   },
   mounted() {
     this.changeFlag()

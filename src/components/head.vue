@@ -10,6 +10,7 @@
 </template>
 
 <script>
+import {baseUrl} from './tool'
 import headPhoto from '../assets/head.jpg'
 export default {
   data(){
@@ -35,7 +36,7 @@ export default {
       let that = this
       this.axios({
         method: 'post',
-        url: 'http://xcloud.dev.xcharger.net/service/api/logout',
+        url: `${baseUrl}/logout`,
         withCredentials: true,
         data:{
           loginId: that.id
@@ -56,7 +57,7 @@ export default {
   font-size: 20px;
 	letter-spacing: 0.4px;
   color: #fff;
-  background-color: #0b1721;
+  background-color: rgba(4,0,23,0.2);
   & .name{
     float: left;
     height: inherit;

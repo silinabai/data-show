@@ -26,12 +26,13 @@
 </template>
 
 <script>
+  import {baseUrl} from './tool'
   export default {
     data() {
       return {
         flagError: false,
-        name: 'zhichong',
-        password: 'xcharger88'
+        name: '',
+        password: ''
       }
     },
     methods: {
@@ -43,7 +44,7 @@
         }
         this.axios({
           method: 'post',
-          url: 'http://xcloud.dev.xcharger.net/service/api/login',
+          url: `${baseUrl}/login`,
           withCredentials: true,
           data: {
             loginId: that.name,
@@ -90,7 +91,7 @@
   .login {
     width: 100%;
     height: 100%;
-    background: url('../assets/login_bg.jpg') no-repeat center;
+    background:#050a1e url('../assets/login_bg.jpg') no-repeat center;
     background-size: cover;
     & .content {
       position: relative;
