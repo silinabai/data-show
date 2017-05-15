@@ -1,10 +1,9 @@
 <template lang="html">
-  <div id="week"></div>
+  <div id="TwelveMonth"></div>
 </template>
 
 <script>
   import echarts from 'echarts/lib/echarts'
-  import 'echarts/lib/chart/line'
   import 'echarts/lib/component/tooltip'
   export default {
     data() {
@@ -20,29 +19,28 @@
       }
     },
     mounted() {
-      this.myChart = echarts.init(document.getElementById('week'));
+      this.myChart = echarts.init(document.getElementById('TwelveMonth'));
       this.myChart.setOption({
+        backgroundColor: 'rgba(5, 10, 30,0.64)',
         tooltip: {
           trigger: 'axis'
         },
         title: {
-          text: '一周内充电电量与次数',
-          top: 8,
+          text: '12个月的充电电量和充电次数走势',
+          top: 10,
           left: 20,
           textStyle: {
             color: '#c6c6c6',
-            fontSize: 14
+            fontSize: 15
           }
         },
         grid: {
           bottom: 30,
-          height: 180,
-          width: '75%',
-          left: '12%'
+          height: '60%',
+          width: '84%',
+          left: '8%'
         },
         legend: {
-          itemWidth: 12,
-          itemHeight: 12,
           textStyle: {
             color: '#fff',
             fontSize: 12
@@ -50,7 +48,7 @@
           top: 10,
           right: 20,
           orient: 'horizontal',
-          data: ['直流电量', '交流电量', '次数']
+          data: ['电量', '次数']
         },
         xAxis: [{
           type: 'category',
@@ -77,7 +75,7 @@
           splitArea: {
             "show": false
           },
-          data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
+          data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月','8月','9月','10月','11月','12月']
         }],
         yAxis: [{
             type: 'value',
@@ -135,56 +133,27 @@
           }
         ],
         series: [{
-            name: '直流电量',
+            name: '电量',
             type: 'bar',
             itemStyle: {
               normal: {
-                color: new echarts.graphic.LinearGradient(0, 1, 0, 0, [{
-                  offset: 0,
-                  color: '#0052d6' // 0% 处的颜色
-                }, {
-                  offset: 1,
-                  color: '#50e5ed' // 100% 处的颜色
-                }], false)
+                color: '#00bdfd'
               }
             },
             barWidth: 10,
-            data: [858.96, 529.55, 242.02, 345.94, 448.74, 636.11, 417.60]
-          },
-          {
-            name: '交流电量',
-            type: 'bar',
-            itemStyle: {
-              normal: {
-                color: new echarts.graphic.LinearGradient(0, 1, 0, 0, [{
-                  offset: 0,
-                  color: '#f33c53' // 0% 处的颜色
-                }, {
-                  offset: 1,
-                  color: '#ffb24f' // 100% 处的颜色
-                }], false)
-              }
-            },
-            barWidth: 10,
-            data: [452.12, 510.26, 878.61, 962.72, 1061.23, 645.34, 410.02]
+            data: [858.96, 529.55, 242.02, 345.94, 448.74, 636.11, 417.60 ,858.96, 529.55, 242.02, 345.94, 448.74]
           },
           {
             name: '次数',
-            type: 'line',
+            type: 'bar',
             yAxisIndex: 1,
-            symbolSize: 6,
-            symbol: 'circle',
             itemStyle: {
               normal: {
-                "color": "#00d569"
+                color: '#0154d6'
               }
             },
-            lineStyle: {
-              normal: {
-                "color": "#00d569"
-              }
-            },
-            data: [52,66, 83, 71, 87, 85, 53]
+            barWidth: 10,
+            data: [452.12, 510.26, 878.61, 962.72, 1061.23, 645.34, 410.02,452.12, 510.26, 878.61, 962.72, 1061.23]
           }
         ]
       })
@@ -193,12 +162,11 @@
   }
 </script>
 
-<style lang="scss">
-  #week {
+<style lang="scss" scoped>
+  #TwelveMonth {
     width: 100%;
-    height: 305px;
-    margin-top: 25px;
-    background-color: #050a1e;
+    height: 35%;
+    margin-top: 2%;
     box-shadow: 0 5px 8px 0 #060112;
     border: solid 1px #131c7d;
   }

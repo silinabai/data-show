@@ -1,6 +1,6 @@
 <template lang="html">
   <div class="head">
-    <div class="name">智充充电数据监控</div>
+    <div class="name">智充充电数据监控平台</div>
     <div class="info">
       <img :src="imgUrl">
       <div class="exit" @click='exit'>退出</div>
@@ -11,7 +11,7 @@
 
 <script>
 import {baseUrl} from './tool'
-import headPhoto from '../assets/head.jpg'
+import headPhoto from '../assets/head.png'
 export default {
   data(){
     return{
@@ -53,11 +53,12 @@ export default {
 .head{
   width: 100%;
   height: 64px;
+  position: absolute;
   padding:0 30px;
   font-size: 20px;
 	letter-spacing: 0.4px;
   color: #fff;
-  background-color: rgba(4,0,23,0.2);
+	background-color: rgba(10, 59, 134, 0.64);
   & .name{
     float: left;
     height: inherit;

@@ -9,7 +9,9 @@
 </template>
 
 <script>
-import {baseUrl} from '../tool'
+import {
+  baseUrl
+} from '../tool'
 import datalist_1 from '../../assets/datalist-1.png'
 import datalist_2 from '../../assets/datalist-2.png'
 import datalist_3 from '../../assets/datalist-3.png'
@@ -19,19 +21,19 @@ export default {
     return {
       list: [{
         title: '充电桩(个)',
-        num: 8405,
+        num: 11325,
         img: datalist_1
       }, {
-        title: '次数(次)',
-        num: null,
-        img: datalist_3
-      }, {
-        title: '电量(度)',
+        title: '电量(万度)',
         num: null,
         img: datalist_2
       }, {
-        title: '减少碳排放(千克)',
-        num: 237,
+        title: '服务车次(次)',
+        num: null,
+        img: datalist_3
+      }, {
+        title: '节约碳排放(千克)',
+        num: null,
         img: datalist_4
       }],
     }
@@ -52,7 +54,7 @@ export default {
       return currentdate;
     },
     // axios获取列表
-    getList(){
+    getList() {
       let that = this
       let start = this.getTime(1)
       let end = this.getTime(0)
@@ -60,17 +62,17 @@ export default {
         url: `${baseUrl}/chargebill/stats?startTime=${start}&endTime=${end}`,
         withCredentials: true
       }).then(rep => {
-        that.list[1].num = rep.data.result.timesCount*55
-        that.list[2].num = rep.data.result.powerCharged==null?0:rep.data.result.powerCharged*55
-        that.list[3].num = rep.data.result.powerCharged==null?0:rep.data.result.powerCharged*0.14
+        that.list[1].num = (rep.data.result.timesCount * 55).toFixed(0)
+        that.list[2].num = rep.data.result.powerCharged == null ? 0 : (rep.data.result.powerCharged * 55).toFixed(0)
+        that.list[3].num = rep.data.result.powerCharged == null ? 0 : (rep.data.result.powerCharged * 55 * 0.14).toFixed(0)
       })
     }
   },
   created() {
     this.getList()
-    setInterval(() =>{
+    setInterval(() => {
       this.getList()
-    },5000)
+    }, 5000)
   }
 }
 </script>
@@ -78,11 +80,11 @@ export default {
 <style lang="scss">
 .datalist {
     width: 100%;
-    height: 496px;
+    height: 62%;
     font-size: 10px;
-    background-color: #050a1e;
-    border: solid 1px #131c7d;
+    background-color: rgba(5,10,30,.64);
     box-shadow: 0 5px 8px 0 #060112;
+    border: solid 1px #131c7d;
     & .mode {
         float: left;
         width: 50%;
