@@ -63,11 +63,15 @@ export default {
           itemHeight: '90px',
           left: '20px',
           bottom: '20px',
+          text: ['高','低'],
           seriesIndex: [0],
+          textStyle:{
+            color: '#fff'
+          },
           inRange: {
             color: ['#0072FD', '#0E1B44']
           },
-          calculable: true
+          calculable: false
         },
         geo: {
           map: 'china',

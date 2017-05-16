@@ -34,21 +34,20 @@ export default {
         top: '10px',
         left: '20px'
       },
-      tooltip: {
-        trigger: 'item',
-        formatter: "{a} <br/>{b}: {c} ({d}%)"
-      },
       legend: {
         orient: 'vertical',
         itemGap: 20,
         itemWidth: 10,
         itemHeight: 10,
+        textStyle:{
+          color: '#686f77'
+        },
         top: '50px',
         left: '20px',
         data: ['客车', '出租车', '物流车', '私家车', '分时租赁', '公务车']
       },
       series: [{
-        name: '访问来源',
+        name: '充电信息',
         type: 'pie',
         center: ['70%', '55%'],
         radius: ['50%', '70%'],
@@ -61,6 +60,9 @@ export default {
           },
           emphasis: {
             show: true,
+            formatter:function(param){
+              return param.name + param.percent+'%'
+            },
             textStyle: {
               fontSize: '16',
               fontWeight: 'bold'
@@ -74,7 +76,7 @@ export default {
         },
         data: [{
             value: 335,
-            name: '客车'
+            name: '客车',
           },
           {
             value: 310,

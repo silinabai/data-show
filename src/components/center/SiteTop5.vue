@@ -57,6 +57,10 @@
         }],
         yAxis: [{
           type: 'value',
+          name: '电量',
+          nameTextStyle:{
+            color: '#81878d'
+          },
           // 刻度
           axisTick: {
             show: false

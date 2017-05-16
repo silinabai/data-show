@@ -5,13 +5,16 @@
     <img id="img-pos" src='../../assets/treeOne.png' style='display:none' />
     <img id="img-neg" src='../../assets/treeTwo.png' style='display:none' />
     <div class="mode-left">
-      <div class="title">减少碳排放(千克)</div>
-      <div class="text">237</div>
-      <div class="bot"></div>
+      <div class="center">
+        <div class="title">减少碳排放(千克)</div>
+        <div class="text">237</div>
+      </div>
     </div>
     <div class="mode-right">
-      <div class="title">模拟植树(棵)</div>
-      <div class="text">1325</div>
+      <div class="center">
+        <div class="title">模拟植树(棵)</div>
+        <div class="text">1325</div>
+      </div>
     </div>
   </div>
 </template>
@@ -143,7 +146,7 @@
       }
     },
     mounted() {
-      this.bubbles()
+      // this.bubbles()
       var cv = document.getElementById('map-panel');
   		var imgMap = document.getElementById('img-map');
   		var imgPos = document.getElementById('img-pos');
@@ -163,18 +166,22 @@
     overflow: hidden;
     & canvas {
       display: block;
-      margin: 10px auto 0;
+      margin: 0 auto;
     }
-    & #img-pos{
-      display: block;
-      background: yellow;
-      width: 10px;
+    & .center{
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      width: 100%;
+      height:50px;
+      margin: auto;
     }
     & .title {
       font-size: 14px;
       text-align: center;
       line-height: 1;
-      padding-top: 16px;
       color: #fff;
     }
     & .text {

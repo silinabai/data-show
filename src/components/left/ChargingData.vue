@@ -62,6 +62,7 @@ export default {
         url: `${baseUrl}/chargebill/stats?startTime=${start}&endTime=${end}`,
         withCredentials: true
       }).then(rep => {
+        console.log(rep.data.result)
         that.list[1].num = (rep.data.result.timesCount * 55).toFixed(0)
         that.list[2].num = rep.data.result.powerCharged == null ? 0 : (rep.data.result.powerCharged * 55).toFixed(0)
         that.list[3].num = rep.data.result.powerCharged == null ? 0 : (rep.data.result.powerCharged * 55 * 0.14).toFixed(0)
@@ -114,8 +115,8 @@ export default {
         }
         & img {
             display: block;
-            width: 42px;
-            height: 42px;
+            width: 4.2em;
+            height:4.2em;
             margin: 30px auto 0;
         }
     }
