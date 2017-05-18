@@ -75,27 +75,27 @@ export default {
           }
         },
         data: [{
-            value: 335,
+            value: 5700,
             name: '客车',
           },
           {
-            value: 310,
+            value: 1000,
             name: '出租车'
           },
           {
-            value: 234,
+            value: 500,
             name: '物流车'
           },
           {
-            value: 135,
+            value: 1000,
             name: '私家车'
           },
           {
-            value: 1548,
+            value: 1000,
             name: '分时租赁'
           },
           {
-            value: 1548,
+            value: 800,
             name: '公务车'
           }
         ]

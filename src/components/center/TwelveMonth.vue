@@ -11,14 +11,51 @@
         myChart:{}
       }
     },
+    props:['poData'],
+    watch:{
+      poData:function(newVal,oldVal){
+        //父组件传过来的值进行处理
+        let realPowerCharged = []
+        let realTimeCout = []
+        newVal.arrPowerCharged12.forEach(value =>{
+          realPowerCharged.push(value*20/10000)
+        })
+        newVal.arrTimesCount12.forEach(value =>{
+          realTimeCout.push(value*20/10000)
+        })
+        this.myChart.setOption({
+          series: [{
+              type: 'bar',
+              data: realPowerCharged
+            },
+            {
+              type: 'bar',
+              data: realTimeCout
+            }
+          ]
+        })
+      }
+    },
     methods: {
       _init() {
         window.addEventListener('resize', function() {
           this.myChart.resize()
         }.bind(this))
-      }
+      },
+      // 获取当天的时间
+      getTime() {
+        let arr = []
+        for(let n=0;n<12;n++){
+          let dd = new Date();
+          dd.setMonth(dd.getMonth() + n); //获取AddDayCount天后的日期
+          let M = (dd.getMonth() + 1) < 10 ? "0" + (dd.getMonth() + 1) : (dd.getMonth() + 1) //获取月份，不足10补0
+          arr.push(M+'月')
+        }
+        return arr
+      },
     },
     mounted() {
+      // 实例化
       this.myChart = echarts.init(document.getElementById('TwelveMonth'));
       this.myChart.setOption({
         backgroundColor: 'rgba(5, 10, 30,0.64)',
@@ -37,8 +74,8 @@
         grid: {
           bottom: 30,
           height: '60%',
-          width: '84%',
-          left: '8%'
+          width: '80%',
+          left: '10%'
         },
         legend: {
           textStyle: {
@@ -75,11 +112,11 @@
           splitArea: {
             "show": false
           },
-          data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月','8月','9月','10月','11月','12月']
+          data: this.getTime()
         }],
         yAxis: [{
             type: 'value',
-            name: '电量',
+            name: '电量(万度)',
             axisLine: {
               lineStyle: {
                 color: '#131c7d',
@@ -106,7 +143,7 @@
           },
           {
             type: 'value',
-            name: '次数',
+            name: '次数(万次)',
             axisLine: {
               lineStyle: {
                 color: '#131c7d',
@@ -141,7 +178,7 @@
               }
             },
             barWidth: 10,
-            data: [858.96, 529.55, 242.02, 345.94, 448.74, 636.11, 417.60 ,858.96, 529.55, 242.02, 345.94, 448.74]
+            data: []
           },
           {
             name: '次数',
@@ -153,7 +190,7 @@
               }
             },
             barWidth: 10,
-            data: [452.12, 510.26, 878.61, 962.72, 1061.23, 645.34, 410.02,452.12, 510.26, 878.61, 962.72, 1061.23]
+            data: []
           }
         ]
       })

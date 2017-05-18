@@ -36,7 +36,7 @@ export default {
       let that = this
       this.axios({
         method: 'post',
-        url: `${baseUrl}/logout`,
+        url: `${baseUrl}/api/logout`,
         withCredentials: true,
         data:{
           loginId: that.id

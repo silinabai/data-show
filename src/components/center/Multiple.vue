@@ -4,14 +4,17 @@
       <li v-for='(button,index) in buttons' :key='index' :class='{active:button.flag}' @click='changeButton(index)'>{{button.name}}</li>
     </ul>
     <div class="change-box">
-      <china-map v-if='flagNum==0'></china-map>
-      <site-top v-if='flagNum==1'></site-top>
-      <reduce-emissions v-if='flagNum==2'></reduce-emissions>
+      <china-map v-show='flagNum==0' :poData = 'poData'></china-map>
+      <site-top v-if='flagNum==1' :TopData='TopData'></site-top>
+      <reduce-emissions v-if='flagNum==2' :poData = 'poData'></reduce-emissions>
     </div>
   </div>
 </template>
 
 <script>
+import {
+  baseUrl
+} from '../tool'
 import ChinaMap from './map'
 import SiteTop from './SiteTop5'
 import ReduceEmissions from './ReduceEmissions'
@@ -28,9 +31,11 @@ import ReduceEmissions from './ReduceEmissions'
         },{
           name: '节能减排',
           flag: false
-        }]
+        }],
+        TopData:[]
       }
     },
+    props:['poData'],
     components:{
       ChinaMap,
       SiteTop,
@@ -44,6 +49,14 @@ import ReduceEmissions from './ReduceEmissions'
         this.buttons[index].flag = true;
         this.flagNum = index
       }
+    },
+    created(){
+      this.axios({
+        url: `${baseUrl}/api/op2`,
+        withCredentials: true
+      }).then((response) => {
+        this.TopData = response.data.result;
+      })
     }
   }
 </script>

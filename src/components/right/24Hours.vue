@@ -8,7 +8,31 @@
   export default {
     data() {
       return {
-        myChart:{}
+        myChart:{},
+        DCRatio:[0.559,0.544,0.561,0.553,0.577,0.569,0.532,0.566,0.564,0.537,0.580,0.534,0.537,0.564,0.554,0.539,0.533,0.565,0.545,0.558,0.532,0.579,0.534,0.570,0.542,0.554,0.549,0.577,0.570,0.543],
+        ACRatio:[0.444,0.428,0.455,0.459,0.449,0.444,0.453,0.422,0.447,0.453,0.425,0.444,0.440,0.437,0.445,0.426,0.456,0.436,0.446,0.439,0.444,0.451,0.439,0.424,0.460,0.460,0.421,0.422,0.433,0.457],
+        realDc: [],
+        realAc: []
+      }
+    },
+    props:['poData'],
+    watch:{
+      poData:function(newVal,oldVal){
+        newVal.arrPowerCharged30.slice(0,30).forEach((value,index) =>{
+          this.realDc.push(value.powerCharged*this.DCRatio[index]*20/10000)
+          this.realAc.push(value.powerCharged*this.ACRatio[index]*20/10000)
+        })
+        this.myChart.setOption({
+          series: [{
+              type: 'line',
+              data: this.realDc
+            },
+            {
+              type: 'line',
+              data: this.realAc
+            }
+          ]
+        })
       }
     },
     methods: {
@@ -16,7 +40,18 @@
         window.addEventListener('resize', function() {
           this.myChart.resize()
         }.bind(this))
-      }
+      },
+      // 获取当天的时间
+      getTime() {
+        let arr = []
+        for(let n = 1;n<31;n++){
+          let dd = new Date();
+          dd.setDate(dd.getDate() - n); //获取AddDayCount天后的日期
+          let D = dd.getDate() < 10 ? "0" + dd.getDate() : dd.getDate() //获取几号，不足10补0
+          arr.push(D)
+        }
+        return arr
+      },
     },
     mounted() {
       this.myChart = echarts.init(document.getElementById('lineChart'));
@@ -26,7 +61,7 @@
           trigger: 'axis'
         },
         title: {
-          text: '24小时的直流和交流电量走势',
+          text: '30天的直流和交流电量走势',
           top: 10,
           left: 20,
           textStyle: {
@@ -37,8 +72,8 @@
         grid: {
           bottom: 30,
           height: '60%',
-          width: '84%',
-          left: '8%'
+          width: '80%',
+          left: '10%'
         },
         legend: {
           textStyle: {
@@ -75,11 +110,11 @@
           splitArea: {
             "show": false
           },
-          data: ['0','1', '2', '3', '4', '5', '6', '7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22','23']
+          data: this.getTime().reverse()
         }],
         yAxis: [{
             type: 'value',
-            name: '电量',
+            name: '电量(万度)',
             axisLine: {
               lineStyle: {
                 color: '#131c7d',
@@ -114,7 +149,7 @@
               }
             },
             barWidth: 10,
-            data: [858.96, 529.55, 242.02, 345.94, 448.74, 636.11, 417.60 ,858.96, 529.55, 242.02, 345.94, 448.74,858.96, 529.55, 242.02, 345.94, 448.74, 636.11, 417.60 ,858.96, 529.55, 242.02, 345.94, 448.74]
+            data: []
           },
           {
             name: '交流',
@@ -125,7 +160,7 @@
               }
             },
             barWidth: 10,
-            data: [452.12, 510.26, 878.61, 962.72, 1061.23, 645.34, 410.02,452.12, 510.26, 878.61, 962.72, 1061.23,452.12, 510.26, 878.61, 962.72, 1061.23, 645.34, 410.02,452.12, 510.26, 878.61, 962.72, 1061.23]
+            data: []
           }
         ]
       })

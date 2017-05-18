@@ -44,7 +44,7 @@
         }
         this.axios({
           method: 'post',
-          url: `${baseUrl}/login`,
+          url: `${baseUrl}/api/login`,
           withCredentials: true,
           data: {
             loginId: that.name,
@@ -52,7 +52,7 @@
           }
         }).then(rep => {
           if(rep.data.error == null){
-            that.$router.push('/admin')
+            that.$router.push('/analyse/admin')
           }else{
             that.error()
           }
