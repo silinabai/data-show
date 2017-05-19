@@ -18,10 +18,10 @@
         let realPowerCharged = []
         let realTimeCout = []
         newVal.arrPowerCharged12.forEach(value =>{
-          realPowerCharged.push(value*20/10000)
+          realPowerCharged.push((value*20/10000).toFixed(2))
         })
         newVal.arrTimesCount12.forEach(value =>{
-          realTimeCout.push(value*20/10000)
+          realTimeCout.push((value*20/10000).toFixed(2))
         })
         this.myChart.setOption({
           series: [{

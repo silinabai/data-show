@@ -19,8 +19,8 @@
     watch:{
       poData:function(newVal,oldVal){
         newVal.arrPowerCharged30.slice(0,30).forEach((value,index) =>{
-          this.realDc.push(value.powerCharged*this.DCRatio[index]*20/10000)
-          this.realAc.push(value.powerCharged*this.ACRatio[index]*20/10000)
+          this.realDc.push((value.powerCharged*this.DCRatio[index]*20/10000).toFixed(2))
+          this.realAc.push((value.powerCharged*this.ACRatio[index]*20/10000).toFixed(2))
         })
         this.myChart.setOption({
           series: [{

@@ -168,10 +168,7 @@ export default {
       })
       this.myChart.setOption({
         series: [{
-          type: 'map',
-          data: this.items
-        }, {
-          type: 'scatter',
+          name: '订单',
           data: this.MapList,
         }]
       })
@@ -183,9 +180,14 @@ export default {
         this.myChart.resize()
       }.bind(this))
     },
-    handle(){
-      this.myChart.on('click',e =>{
-        window.location.href=`${baseUrl}/orderQuery.html?siteId=${e.data.siteId}`
+    // 点击原点后跳转页面
+    handle() {
+      this.myChart.on('click', e => {
+        if (e.data.siteId == undefined) {
+          return
+        } else {
+          window.open(`${baseUrl}/orderQuery.html?siteId=${e.data.siteId}`)
+        }
       })
     }
   },
@@ -196,10 +198,10 @@ export default {
         show: false
       },
       legend: {
+        name: '分布情况',
         orient: 'vertical',
         y: 'bottom',
         x: 'left',
-        data: ['充电数据'],
         textStyle: {
           color: '#fff'
         }
@@ -243,6 +245,7 @@ export default {
         }
       },
       series: [{
+        name: '分布情况',
         type: 'map',
         geoIndex: 0,
         data: this.items
@@ -250,12 +253,7 @@ export default {
         name: '订单',
         type: 'scatter',
         coordinateSystem: 'geo',
-        data: [],
         symbolSize: 8,
-        showEffectOn: 'render',
-        rippleEffect: {
-          brushType: 'stroke'
-        },
         label: {
           normal: {
             formatter: '{b}',

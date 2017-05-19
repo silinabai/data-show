@@ -2,12 +2,12 @@
   <div class="list">
     <div class="title-box"><span>24小时内全部充电订单</span></div>
     <div class="mode-box">
-      <div class="mode" v-for='(item,index) in items' @click='handleList(item)'>
+      <div class="mode" v-for='(item,index) in items'>
         <div class="center">
-          <img :src="item.imageUrl" v-if='flagImg' @click.stop='handleInfo(item)'>
+          <img :src="item.imageUrl" v-if='flagImg' @click.stop='handleWechat(item)'>
           <div class="order">
-            <div class="title" @click.stop='handleInfo(item)'>{{item.title}}</div>
-            <div class="order-num">{{item.id}}</div>
+            <div class="title" @click.stop='handleSite(item)'>{{item.title}}</div>
+            <div class="order-num" @click.stop='handleInfo(item)'>{{item.id}}</div>
             <div class="time">{{item.chargeStartTime}}</div>
           </div>
           <div class="timeInfo">
@@ -47,11 +47,14 @@ export default {
     poData:function(newVal,oldVal){
       let arr = []
       let that = this;
-      newVal.bills.slice(0,20).forEach(function(e, index) {
+      let lis = newVal.bills.length>=50?newVal.bills.slice(0,50):newVal.bills;
+      lis.forEach(function(e, index) {
         let item = {
           imageUrl: e.wechatUser == null ? defaultImg : e.wechatUser.imageUrl,
-          id: e.id,
-          siteId: e.site.id,
+          id: e.id, //订单Id
+          siteId: e.site.id, //站点Id
+          wechatId: e.wechatUser==null?0:e.wechatUser.id, //微信Id
+          nfcCardId: e.nfcCard==null?0:e.nfcCard.id, //如果不是微信用户就是nfc卡用户
           title: e.site.title,
           chargeStartTime: that.format(e.createTime),
           chargeInterval: e.chargeInterval == null ? 0 : e.chargeInterval,
@@ -72,12 +75,20 @@ export default {
       }.bind(this))
     },
     // 跳转到站点订单列表页
-    handleList: function(value) {
-      window.location.href=`${baseUrl}/orderQuery.html?siteId=${value.siteId}`
+    handleSite: function(value) {
+      window.open(`${baseUrl}/orderQuery.html?siteId=${value.siteId}`)
     },
     // 跳转到该订单的详情页
     handleInfo:function(value){
-      window.location.href=`${baseUrl}/orderInfo.html?id=${value.siteId}`
+      window.open(`${baseUrl}/orderInfo.html?id=${value.id}`)
+    },
+    handleWechat:function(value){
+      if(value.wechatId!==0){
+        window.open(`${baseUrl}/orderQuery.html?wechatUserId=${value.wechatId}`)
+      }else{
+        window.open(`${baseUrl}/orderQuery.html?nfcCardId=${value.nfcCardId}`)
+      }
+
     },
     // 隐藏或显示用户的头像
     changeFlag() {

@@ -12,7 +12,6 @@ export default {
   data() {
     return {
       myChart: {},
-      ids: []
     }
   },
   props: ['TopData'],
@@ -22,7 +21,7 @@ export default {
       let y = []
       newVal.forEach((value) => {
         x.push(value.siteTitle)
-        y.push(value.powerCharged)
+        y.push((value.powerCharged).toFixed(0))
         this.ids.push(value.siteId)
       })
       this.myChart.setOption({
@@ -46,7 +45,7 @@ export default {
     yAxisData: function() {
       let arr = []
       this.TopData.forEach(value => {
-        arr.push(value.powerCharged)
+        arr.push((value.powerCharged).toFixed(0))
       })
       return arr
     },
@@ -66,7 +65,7 @@ export default {
     },
     jumpURL: function() {
       this.myChart.on('click', (e) => {
-        window.location.href = `${baseUrl}/orderQuery.html?siteId=${this.ids[e.dataIndex]}`
+        window.open(`${baseUrl}/orderQuery.html?siteId=${this.ids[e.dataIndex]}`)
       })
     }
   },
@@ -107,7 +106,7 @@ export default {
       }],
       yAxis: [{
         type: 'value',
-        name: '电量',
+        name: '电量(度)',
         nameTextStyle: {
           color: '#81878d'
         },
@@ -131,7 +130,7 @@ export default {
         }
       }],
       series: [{
-        name: '电量',
+        name: '电量(度)',
         type: 'bar',
         data: this.yAxisData,
         barWidth: '60%',

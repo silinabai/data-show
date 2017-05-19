@@ -4,9 +4,9 @@
       <li v-for='(button,index) in buttons' :key='index' :class='{active:button.flag}' @click='changeButton(index)'>{{button.name}}</li>
     </ul>
     <div class="change-box">
-      <china-map v-show='flagNum==0' :poData = 'poData'></china-map>
-      <site-top v-if='flagNum==1' :TopData='TopData'></site-top>
-      <reduce-emissions v-if='flagNum==2' :poData = 'poData'></reduce-emissions>
+      <china-map v-show='flagNum===0' :poData = 'poData'></china-map>
+      <site-top v-if='flagNum===1' :TopData='TopData'></site-top>
+      <reduce-emissions v-if='flagNum===2' :poData = 'poData'></reduce-emissions>
     </div>
   </div>
 </template>
@@ -52,7 +52,10 @@ import ReduceEmissions from './ReduceEmissions'
     },
     created(){
       this.axios({
-        url: `${baseUrl}/api/op2`,
+        // 测试环境
+        // url: `${baseUrl}/api/op2?site=851283513880743936,851702019604484096`,
+        // 正式环境
+        url: `${baseUrl}/api/op2?site=854528862003142656,801078335651454976,756037547175714816,756055406572343296,861410817491607552`,
         withCredentials: true
       }).then((response) => {
         this.TopData = response.data.result;
